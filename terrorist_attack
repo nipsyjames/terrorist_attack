@@ -1,0 +1,70 @@
+import pandas as pd
+import numpy as np
+import os as os
+terror=pd.read_csv('C:\\Users\\USER\\Desktop\\ML\\terror.csv',encoding='latin')
+terror[terror.country_txt=='India'].country_txt.count()
+
+output - 11960
+
+terror[(terror.country_txt=='India') & (terror.nkill<=3)].country_txt.count()
+
+output - 10288
+
+terror[(terror.country_txt=='India') & (terror.nkill<=3)][['city','summary']]
+
+          city			summary
+1186			New Delhi		NaN
+3857			New Delhi		NaN
+5327			Bombay			NaN
+7342			Imphal			NaN
+.........
+181325			Khamdu			12/15/2017: Assailants abducted Arunabh Phukan..
+181328			Barnala			2/15/2017: Assailants opened fire on Bhagwan ...	
+10288 rows × 2 columns  
+
+terror[(terror.country_txt=='India')].sort_values(by="nkill",ascending=False)[['city','nkill']].head(5)
+
+output - 		city		      nkill
+    81098		Mumbai		    188.0
+    96726		Jhargam		    115.0
+    54416		Bombay		    115.0
+    95988		Dantewada dist 82.0
+    56912		Banabari	    70.0
+    
+terror[(terror.country_txt=='India')].sort_values(by='nwound',ascending=False)[['city','nkill','nwound']].head(5)
+
+output - 	city		  nkill	nwound
+    81098	Mumbai		188.0	817.0
+    89255	Dispur		37.0	235.0
+    30454	Chennai		32.0	200.0
+    79145	New Delhi	55.0	155.0
+    75842	Mumbai		52.0	150.0
+    
+terror[(terror.weapsubtype1_txt=='Suicide (carried bodily by human being)') & (terror.success==1)].success.count()
+
+output -2609
+
+terror['severity']=['severe' if i>5 else 'not severe'  for i in terror.nkill]
+terror['severity']
+
+0         not severe
+1         not severe
+2         not severe
+3         not severe
+4         not severe
+5         not severe
+6         not severe
+7         not severe
+......
+
+
+print(terror[terror.levels=="Asia"].levels.count()*100/ terror[terror.levels=="Row"].levels.count())
+
+output - 27.384457905659318
+
+terror[terror.suicide==1].groupby('levels')[['nkill']].agg(['count','mean']).rename(columns ={'count': 'Number_Incidents','mean': 'Average_Kills'})
+
+
+levels    Number_Incidents  Average_Kills
+Asia      1795              8.431198
+Row       4730              11.010359
